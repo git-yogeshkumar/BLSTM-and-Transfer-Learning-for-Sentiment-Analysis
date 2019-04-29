@@ -1,0 +1,711 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<style type="text/css">
+			.testimonials{
+				margin:20px auto 10px;
+				display:flex;
+				justify-content: space-between;
+			}
+			.testimonials .card{
+				position:relative;
+				width:350px;
+				margin:0 auto;
+				background:#333;
+				padding:20px;
+				box-sizing: border-box;
+				text-align:center;
+				box-shadow:0 10px 40px rgba(0,0,0,.5);
+				overflow: hidden;
+			}
+			.testimonials .card .layer{
+				position: absolute;
+				top: calc(100% - 3px);
+				width:100%;
+				height:100%;
+				left:0;
+				background:linear-gradient(#03a9f4, #e81dd3);
+				z-index:1;
+				transition:0.5s;
+			}
+			.testimonials .card:hover .layer{
+				top:0;
+			}
+			.testimonials .card .content{
+				position:relative;
+				z-index:2;
+			}
+			.testimonials .card .content p{
+				font-size:18px;
+				line-height:24px;
+				color:#FFF;
+			}
+			.testimonials .card .content .image{
+				width:150px;
+				height:150px;
+				margin: 0 auto;
+				padding: 10px;
+				border-radius:50%;
+				overflow:hidden;
+				box-shadow: 0 10px 20px rgba{0,0,0, .2};
+			}
+			.testimonials .card .content .details h2{
+				font-size:15px;
+				color:#fff;
+			}
+			.testimonials .card .content .details h2 span{
+				color:#03a9f4;
+				font-size:12px;
+				transtion:0.5s;
+			}
+			.testimonials .card:hover .content .details h2 span{
+				color:#fff;
+			}
+		</style>
+		<title>Cyber Bullying Detection</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static' , filename='assets/css/main.css') }}" />
+		<noscript><link rel="stylesheet" href="{{ url_for('static' , filename='assets/css/noscript.css') }}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+								<span class="image main"><img src="{{ url_for('static', filename='images/brain1.png') }}" alt="" /></span>
+						</div>
+						<div class="content">
+							<div class="inner">
+								<h1>Cyber Bullying Detection Using Deep Learning</h1>
+								<p>A Deep Learning Model that uses Sentiment Specific Word Embeddings and Feature Transfer Learning<br> to Predict wheather the Tweets or Comments are Racism/Sexism or Neutral.<br />
+							</div>
+						</div>
+						<a style="display: block;min-width: 7.5rem;height: 2.75rem;line-height: 2.75rem;padding: 0 1.25rem 0 1.45rem;text-transform: uppercase;letter-spacing: 0.2rem;font-size: 0.8rem;border: 1px solid white;border-radius: 5px" href="#start">START</a>
+						<nav>
+							<ul>
+								<li><a href="#intro">Intro</a></li>
+								<li><a href="#work">Work</a></li>
+								<li><a href="#about">About</a></li>
+								<!-- <li><a href="#start">Start</a></li> -->
+								<li><a href="#insights">Insights</a></li>
+								<li><a href="#readme">ReadMe</a></li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Intro -->
+							<article id="intro">
+								<center>
+								<h2 class="major">Introduction</h2></center>
+								<span class="image main"><img src="{{ url_for('static', filename='images/bully.jpg') }}" alt="" /></span>
+								<p>With the advancement of technology, craze of social networking platforms is proliferating. Online
+users now share their information with each other easily using computers, mobile phones etc.
+However, this has led to the growth of cyber-criminal acts for example, cyberbullying which has
+become a worldwide epidemic. Cyberbullying is the use of electronic communication to bully a
+person by sending harmful messages using social media, instant messaging or through digital
+messages. It has emerged out as a platform for insulting, humiliating a person which can affect the
+person either physically or emotionally and sometimes leading to suicidal attempts in the worst case.</a></p>
+								<p>Detection of cyberbullying and the provision of subsequent preventive measures are the
+main course of action to combat cyberbullying. Content analysis of social media is
+important aspect to identify the emotions of writer from the text and attracted many
+researchers in recent year. Content analysis for identifying the feeling is known as
+semantic analysis. The proposed method is a effective method to detect cyberbullying
+activities in social media. The detection method can identify the cyberbullying terms using
+Support Vector Machine Algorithm (SVM) and sentiment specific word embedding
+(SSWE) that will create clusters of bullying words using the sentiments as a factor too on
+the dataset which is available on Github, that will create a scope to have bird’s eye details
+of negative emotions to track the intention of bullying to get higher accuracy.</p>
+							</article>
+
+						<!-- Work -->
+							<article id="work">
+								<center>
+								<h2 class="major">Work</h2></center>
+								<span class="image main"><img src="{{ url_for('static', filename='images/work.jpg') }}" alt="" /></span>
+								<p>We have made the code and the model architecture that we have used available, so that people can use and modify the same.</p>
+								<p></p>
+								<div id="codeSnippet">
+								<pre><code>import tflearn
+import numpy as np
+import argparse
+import pickle
+import string
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.metrics import roc_auc_score
+import preprocessor as p
+from collections import Counter
+from sklearn import metrics
+from sklearn.metrics import classification_report, confusion_matrix 
+from tensorflow.contrib import learn
+from tflearn.data_utils import to_categorical, pad_sequences
+from scipy import stats
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+from tflearn.layers.core import input_data, dropout, fully_connected
+from tflearn.layers.conv import conv_1d, global_max_pool
+from tflearn.layers.merge_ops import merge
+from tflearn.layers.estimator import regression
+import tensorflow as tf
+import os
+os.environ['KERAS_BACKEND']='theano'
+from keras.layers import Embedding
+from keras.layers import Dense, Input, Flatten
+from keras.layers import Conv1D, MaxPooling1D, Embedding, Dropout, LSTM, GRU, Bidirectional
+from keras.models import Model,Sequential
+from keras import backend as K
+from keras.engine.topology import Layer, InputSpec
+from keras import initializers, optimizers
+#These Functions are for loading the data
+def load_data(filename):
+    print("Loading data from file: " + filename)
+    data = pickle.load(open(filename, 'rb'))
+    data
+    x_text = []
+    labels = [] 
+    for i in range(len(data)):
+        x_text.append(p.tokenize((data[i]['text'])))
+        labels.append(data[i]['label'])
+    return x_text,labels
+
+def get_filename(dataset):
+    global HASH_REMOVE
+    if(dataset=="twitter"):
+        HASH_REMOVE = True
+        EPOCHS = 10
+        BATCH_SIZE = 128
+        MAX_FEATURES = 2
+        filename = "/home/yogesh/Desktop/Minor/data/twitter_data.pkl"
+    return filename
+data_1 = "twitter"
+model_type ="blstm_attention"
+vector_type = "sswe"
+embed_size = 50
+oversampling_rate = 3
+max_document_length=None
+EMBED_SIZE = 50
+EPOCHS = 5
+BATCH_SIZE = 128
+MAX_FEATURES = 2
+NUM_CLASSES = 2
+DROPOUT = 0.25
+LEARN_RATE = 0.01
+#HASH_REMOVE=True
+
+x_text, labels = load_data(get_filename(data_1))
+dict1 = {'racism':1,'sexism':1,'none':0} #Transfer learning only two classes
+labels = [dict1[b] for b in labels]        
+racism = [i for i in range(len(labels)) if labels[i]==2]
+sexism = [i for i in range(len(labels)) if labels[i]==1]
+x_text = x_text + [x_text[x] for x in racism]*(oversampling_rate-1)+ [x_text[x] for x in sexism]*(oversampling_rate-1)
+labels = labels + [2 for i in range(len(racism))]*(oversampling_rate-1) + [1 for i in range(len(sexism))]*(oversampling_rate-1)
+print("Counter after oversampling")
+from collections import Counter
+print(Counter(labels))
+
+#splitting the data into training set and testing set
+X_train, X_test, Y_train, Y_test = train_test_split( x_text, labels, random_state=121, test_size=0.10)
+
+post_length = np.array([len(x.split(" ")) for x in x_text])
+if(data_1 != "twitter"):
+    max_document_length = int(np.percentile(post_length, 95))
+else:
+    max_document_length = max(post_length)
+print("Document length : " + str(max_document_length))
+
+vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length, MAX_FEATURES)
+vocab_processor = vocab_processor.fit(x_text)
+trainX = np.array(list(vocab_processor.transform(X_train)))
+testX = np.array(list(vocab_processor.transform(X_test)))
+
+vocab_size = len(vocab_processor.vocabulary_)
+print("Vocabulary Size: {:d}".format(vocab_size))
+
+vocab = vocab_processor.vocabulary_._mapping
+trainY = np.asarray(Y_train)
+testY = np.asarray(Y_test)
+       
+trainX = pad_sequences(trainX, maxlen=max_document_length, value=0.)
+testX = pad_sequences(testX, maxlen=max_document_length, value=0.)
+trainY = to_categorical(trainY, nb_classes=NUM_CLASSES)
+testY = to_categorical(testY, nb_classes=NUM_CLASSES)
+
+print("Running Model: " + model_type + " with word vector initiliazed with " + vector_type + " word vectors.")
+
+#Attention Layer Class for blstm attention model
+class AttLayer(Layer):
+
+    def __init__(self, **kwargs):
+        super(AttLayer, self).__init__(**kwargs)
+
+    def build(self, input_shape):
+        self.W = self.add_weight(name='kernel', 
+                                      shape=(input_shape[-1],),
+                                      initializer='random_normal',
+                                      trainable=True)
+        super(AttLayer, self).build(input_shape)
+
+    def call(self, x, mask=None):
+        eij = K.tanh(K.dot(x, self.W))
+        
+        ai = K.exp(eij)
+        weights = ai/K.sum(ai, axis=1).dimshuffle(0,'x')
+        
+        weighted_input = x*weights.dimshuffle(0,1,'x')
+        return weighted_input.sum(axis=1)
+
+    def compute_output_shape(self, input_shape):
+        return (input_shape[0], input_shape[-1])
+
+model = Sequential()
+model.add(Embedding(vocab_size, embed_size, input_length=trainX.shape[1]))
+model.add(Dropout(0.25))
+model.add(Bidirectional(LSTM(embed_size, return_sequences=True)))
+model.add(AttLayer())
+model.add(Dropout(0.50))
+model.add(Dense(NUM_CLASSES, activation='softmax'))
+adam = optimizers.Adam(lr=LEARN_RATE, beta_1=0.9, beta_2=0.999)
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.summary()
+
+from keras.models import model_from_json
+json_file = open('model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+loaded_model = model_from_json(loaded_model_json,custom_objects={'AttLayer': AttLayer})
+# load weights into new model
+loaded_model.load_weights("model.h5")
+print("Loaded model from disk")
+loaded_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+def get_pred(xyz):
+    tweet = xyz
+    tokens=p.tokenize(tweet)
+    l=[]
+    l.append(tokens)
+    arr=np.array(list(vocab_processor.transform(l)))
+    tmp = loaded_model.predict_proba(arr)
+    acc=max(tmp[0])*100
+    print(arr)
+    res=np.argmax(loaded_model.predict(arr),1)
+    print(res)
+    if res[0]==1 :
+        val = "Sexist or Racist Post"
+    else :
+        val = "Neutral Post"
+    return {'result': val, 'accuracy': acc}
+    							<script type="text/javascript">
+								$(document).ready(function() {
+								$('.slideshow').cycle({
+								fx: 'shuffle' // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+								});
+								});
+								</script>
+								</code>
+								</pre>
+								</div>
+							</article>
+
+						<!-- About -->
+							<article id="about">
+								<center>
+								<h2 class="major">About</h2></center>
+								<div class="testimonials">
+								    <!-- CARD 1 START-->
+								    <div class="card">
+								      <div class="layer"></div>
+								      <div class="content">
+								        <p>A Computer Science Engineering student at Acropolis Institute of Technology and Research. Loves to code and always ready to learn.</p>
+								        <div class="image">
+								          <img src="http://icons.iconarchive.com/icons/hopstarter/face-avatars/128/Male-Face-O1-icon.png" class="img-fluid">
+								        </div>
+								        <div class="details">
+								          <h2>
+								            &nbspYogesh<br>
+								            <span>&nbspStudent<br> 0827CS161252</span>            
+								          </h2>
+								        </div>
+								      </div>
+								    </div>
+								    <!-- CARD 1 end-->
+								    
+								    <!-- CARD 2 START-->
+								    <div class="card">
+								      <div class="layer"></div>
+								      <div class="content">
+								        <p>A Computer Science Engineering student at Acropolis Institute of Technology and Research. Intrested in Designing and Painting.</p>
+								        <div class="image">
+								          <img src="http://icons.iconarchive.com/icons/hopstarter/face-avatars/128/Female-Face-FE-1-blonde-icon.png" alt="">
+								        </div>
+								        <div class="details">
+								        	<center>
+								          <h2> &nbsp&nbspYashi <br>
+								            <span>&nbspStudent<br> 0827CS161250</span></center>            
+								          </h2>
+								        </div>
+								      </div>
+								    </div>
+								    <!-- CARD 2 end-->
+								    <!-- CARD 3 START-->
+								    <div class="card">
+								      <div class="layer"></div>
+								      <div class="content">
+								        <p>A Computer Science Engineering student at Acropolis Institute of Technology and Research. Great Photographer and a sincere guy.</p>
+								        <div class="image">
+								          <img src="http://icons.iconarchive.com/icons/hopstarter/face-avatars/128/Male-Face-M2-icon.png" alt="">
+								        </div>
+								        <div class="details">
+								          <h2>&nbspSanchit<br>
+								            <span>&nbspStudent<br> 0827CS161198</span>            
+								          </h2>
+								        </div>
+								      </div>
+								    </div>
+								    <!-- CARD 3 end-->
+							</article>
+
+						<!-- Start -->
+							<article id="start">
+								<center>
+								<h2 class="major">Cyber Bullying Detector</h2></center>
+								<form method="post" action="/get">
+									<div class="fields">
+										<div class="field">
+											<label for="message">Enter the Data: </label>
+											<textarea name="message" id="message" rows="10"></textarea>
+											<br>
+											<label for="message">Result: <span id="res"></span></label>
+											<label for="message">Accuracy: <span id="acc"></span></label>
+										</div>
+									</div>
+									<ul class="actions" style="display: flex;justify-content: center">
+										<li><input type="submit" value="Analyze Data" class="primary" id="submit" /></li>
+										<li><input type="reset" value="Reset" id="set" /></li>
+									</ul>
+								</form>
+							</article>
+
+							<article id="insights">
+								<center>
+								<h2 class="major">Data Insights</h2></center>
+								<p>Pie Chart showing the distribution of the traing and testing data for the model.</p>
+								<span class="image main"><img src="{{ url_for('static', filename='images/Train_Test.png') }}" alt="" /></span>
+								<p>Word Embeddings that are used in this Deep Neural Network can be visualized form the below mentioned link: 
+								</p>
+								<p><a href="https://projector.tensorflow.org/">Embedding-Projector</a></p>
+							</article>
+
+							<!-- ReadMe -->
+							<article id="readme">
+								<center>
+								<h2 class="major">Read Me</h2></center>
+								<span class="image main"><img src="{{ url_for('static', filename='images/pic01.jpg') }}" alt="" /></span>
+							</article>
+
+						<!-- Elements -->
+							<article id="elements">
+								<h2 class="major">Elements</h2>
+
+								<section>
+									<h3 class="major">Text</h3>
+									<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+									This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+									This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
+									<hr />
+									<h2>Heading Level 2</h2>
+									<h3>Heading Level 3</h3>
+									<h4>Heading Level 4</h4>
+									<h5>Heading Level 5</h5>
+									<h6>Heading Level 6</h6>
+									<hr />
+									<h4>Blockquote</h4>
+									<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+									<h4>Preformatted</h4>
+									<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+    print 'Iteration ' + i;
+    deck.shuffle();
+    i++;
+}
+
+print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
+								</section>
+
+								<section>
+									<h3 class="major">Lists</h3>
+
+									<h4>Unordered</h4>
+									<ul>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Alternate</h4>
+									<ul class="alt">
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Ordered</h4>
+									<ol>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis viverra.</li>
+										<li>Felis enim feugiat.</li>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis lorem.</li>
+										<li>Felis enim et feugiat.</li>
+									</ol>
+									<h4>Icons</h4>
+									<ul class="icons">
+										<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
+									</ul>
+
+									<h4>Actions</h4>
+									<ul class="actions">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+								</section>
+
+								<section>
+									<h3 class="major">Table</h3>
+									<h4>Default</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+
+									<h4>Alternate</h4>
+									<div class="table-wrapper">
+										<table class="alt">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</section>
+
+								<section>
+									<h3 class="major">Buttons</h3>
+									<ul class="actions">
+										<li><a href="#" class="button primary">Primary</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button">Default</a></li>
+										<li><a href="#" class="button small">Small</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button primary icon fa-download">Icon</a></li>
+										<li><a href="#" class="button icon fa-download">Icon</a></li>
+									</ul>
+									<ul class="actions">
+										<li><span class="button primary disabled">Disabled</span></li>
+										<li><span class="button disabled">Disabled</span></li>
+									</ul>
+								</section>
+
+								<section>
+									<h3 class="major">Form</h3>
+									<form method="post" action="#">
+										<div class="fields">
+											<div class="field half">
+												<label for="demo-name">Name</label>
+												<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
+											</div>
+											<div class="field half">
+												<label for="demo-email">Email</label>
+												<input type="email" name="demo-email" id="demo-email" value="" placeholder="jane@untitled.tld" />
+											</div>
+											<div class="field">
+												<label for="demo-category">Category</label>
+												<select name="demo-category" id="demo-category">
+													<option value="">-</option>
+													<option value="1">Manufacturing</option>
+													<option value="1">Shipping</option>
+													<option value="1">Administration</option>
+													<option value="1">Human Resources</option>
+												</select>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+												<label for="demo-priority-low">Low</label>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-high" name="demo-priority">
+												<label for="demo-priority-high">High</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-copy" name="demo-copy">
+												<label for="demo-copy">Email me a copy</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-human" name="demo-human" checked>
+												<label for="demo-human">Not a robot</label>
+											</div>
+											<div class="field">
+												<label for="demo-message">Message</label>
+												<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+											</div>
+										</div>
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" class="primary" /></li>
+											<li><input type="reset" value="Reset" /></li>
+										</ul>
+									</form>
+								</section>
+
+							</article>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; Acropolis Institute of Technology and Research</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="{{ url_for('static' , filename='assets/js/jquery.min.js') }}"></script>
+			<script src="{{ url_for('static' , filename='assets/js/browser.min.js') }}"></script>
+			<script src="{{ url_for('static' , filename='assets/js/breakpoints.min.js') }}"></script>
+			<script src="{{ url_for('static' , filename='assets/js/util.js') }}"></script>
+			<script src="{{ url_for('static' , filename='assets/js/main.js') }}"></script>
+			<script type="text/javascript">
+				function postData(url = ``, data = {}) {
+				  // Default options are marked with *
+				    return fetch(url, {
+				        method: "POST", // *GET, POST, PUT, DELETE, etc.
+				        mode: "cors", // no-cors, cors, *same-origin
+				        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+				        credentials: "same-origin", // include, *same-origin, omit
+				        headers: {
+				            "Content-Type": "application/json",
+				            // "Content-Type": "application/x-www-form-urlencoded",
+				        },
+				        redirect: "follow", // manual, *follow, error
+				        referrer: "no-referrer", // no-referrer, *client
+				        body: JSON.stringify(data), // body data type must match "Content-Type" header
+				    })
+				    .then(response => {console.log(response);return response.json()}); // parses JSON response into native Javascript objects 
+				}
+				const [res, acc] = [document.getElementById('res'), document.getElementById('acc')] 
+				const btn = document.querySelector('#submit')
+				const ta = document.querySelector('#message')
+				const set = document.querySelector('#set')
+				set.addEventListener('click', e=> {
+					res.innerText=''
+					acc.innerText=''
+					ta.value=''
+				})
+				btn.addEventListener('click', e => {
+					e.preventDefault()
+					let txt = ta.value
+					postData(`/get`, {message: txt})
+					  .then(data => {
+					  	console.log(data)
+					  	res.innerText = JSON.parse(JSON.stringify(data))['result']
+					  	acc.innerText = JSON.parse(JSON.stringify(data))['accuracy']
+					  })
+					  .catch(error => console.error(error));
+				})
+			</script>
+	</body>
+</html>
