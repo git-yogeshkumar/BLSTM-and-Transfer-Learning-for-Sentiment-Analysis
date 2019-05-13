@@ -1,3 +1,7 @@
 # BLSTM-and-Transfer-Learning-for-Sentiment-Analysis
 Using deeplearning and transfer learning to detect CyberBullying on Multiple Social Media Platform.(in progress).
 ![Global Survey Results on CyberBullying](https://user-images.githubusercontent.com/26704802/56014944-f5700880-5d14-11e9-9b3a-8cab4e4d09cd.png)
+
+With the advancement of technology, craze of social networking platforms is proliferating. Online users now share their information with each other easily using computers, mobile phones etc. However, this has led to the growth of cyber-criminal acts for example, cyberbullying which has become a worldwide epidemic. Cyberbullying is the use of electronic communication to bully a person by sending harmful messages using social media, instant messaging or through digital messages. It has emerged out as a platform for insulting, humiliating a person which can affect the person either physically or emotionally and sometimes leading to suicidal attempts in the worst case. Harassment by cyberbullies is a significant phenomenon on the social media. Existing works for cyberbullying detection has at least one of the following three bottlenecks. First, they target only one particular social media platform (SMP). Second, they address just one topic of cyberbullying. Third, they rely on carefully handcrafted features of the data. We show that deep learning-based models can overcome all three bottlenecks. Knowledge learned by these models on one dataset can be transferred to other datasets.
+
+# Here's how you can go through the project.
